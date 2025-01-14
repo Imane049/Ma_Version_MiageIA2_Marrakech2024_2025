@@ -81,7 +81,7 @@ function setup() {
   }
   for (let i = 0; i < 20; i++) {
     const s = new Boid(random(width), random(height), turtleImage);
-    s.r = 80; 
+    s.r = 60; 
     s.maxSpeed = 3; 
     s.maxForce = 0.1;
     s.separationWeight = 5;
