@@ -1,4 +1,4 @@
-class Vehicle {
+class Wanderer {
   static debug = false;
   constructor(x, y, image) {
     this.pos = createVector(x, y);
@@ -38,7 +38,7 @@ class Vehicle {
     centreCercleDevant.setMag(this.distanceCercle);
     centreCercleDevant.add(this.pos);
 
-    if (Vehicle.debug) {
+    if (Wanderer.debug) {
       // on le dessine sous la forme d'une petit cercle rouge
       fill("red");
       circle(centreCercleDevant.x, centreCercleDevant.y, this.circleRadius);
@@ -68,7 +68,7 @@ class Vehicle {
 
     // maintenant pointSurCercle c'est un point sur le cercle
     // on le dessine sous la forme d'un cercle vert
-    if (Vehicle.debug) {
+    if (Wanderer.debug) {
       fill("lightGreen");
       circle(pointSurCercle.x, pointSurCercle.y, 8);
 
@@ -89,15 +89,15 @@ class Vehicle {
     return force;
   }
 
-  evade(vehicle) {
-    let pursuit = this.pursue(vehicle);
+  evade(Wanderer) {
+    let pursuit = this.pursue(Wanderer);
     pursuit.mult(-1);
     return pursuit;
   }
 
-  pursue(vehicle) {
-    let target = vehicle.pos.copy();
-    let prediction = vehicle.vel.copy();
+  pursue(Wanderer) {
+    let target = Wanderer.pos.copy();
+    let prediction = Wanderer.vel.copy();
     prediction.mult(10);
     target.add(prediction);
     fill(0, 255, 0);

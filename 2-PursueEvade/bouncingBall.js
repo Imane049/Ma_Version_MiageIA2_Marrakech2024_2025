@@ -1,7 +1,7 @@
 class BouncingBall extends Target {
     constructor(x, y) {
       super(x, y);
-      this.r = 10;
+      this.r = 20;
     }
 
     update() {

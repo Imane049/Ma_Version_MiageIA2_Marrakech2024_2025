@@ -84,8 +84,8 @@ function keyPressed() {
     debug = !debug;
     Vehicle.debug = !debug;
   } else if(key == "s") {
-    // On crée à la position de la souris un véhicule rapide rouge
-    
+    let v = new Vehicle(1,12 , 10, 1);  
+    vehicles.push(v);    
   } else if (key == "w") {
     // On crée un véhicule wander
   }

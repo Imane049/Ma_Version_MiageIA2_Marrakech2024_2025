@@ -1,6 +1,5 @@
 class Vehicle {
   static debug = false;
-
   constructor(x, y) {
     this.pos = createVector(x, y);
     this.vel = createVector(0, 0);
@@ -12,9 +11,10 @@ class Vehicle {
   }
 
   applyBehaviors(target) {
-    let force = this.arrive(target);
-    this.applyForce(force);
+    let arriveForce = this.arrive(target); 
+    this.applyForce(arriveForce);
   }
+  
 
   evade(vehicle) {
     let pursuit = this.pursue(vehicle);
@@ -36,14 +36,14 @@ class Vehicle {
     // 2nd argument true enables the arrival behavior
     // 3rd argumlent d is the distance behind the target
     // for "snake" behavior
-    return this.seek(target, true);
+    return this.seek(target, true, 100);
   }
 
   flee(target) {
     // recopier code de flee de l'exemple précédent
   }
 
-  seek(target, arrival=false) {
+  seek(target, arrival=true, d) {
     let desiredSpeed = p5.Vector.sub(target, this.pos);
     let desiredSpeedMagnitude = this.maxSpeed;
 
@@ -73,7 +73,7 @@ class Vehicle {
         // entre start2 et stop2
         // ici dist est entre 0 et le razyon du cercle de freinage, et on transforme cette valeur
         // pour qu'elle soit entre 0 et maxSpeed
-        desiredSpeedMagnitude = map(dist, 0, this.rayonZoneDeFreinage, 0, this.maxSpeed)
+        desiredSpeedMagnitude = map(dist, d , this.rayonZoneDeFreinage, 0, this.maxSpeed)
       }
     }
 
@@ -100,14 +100,14 @@ class Vehicle {
     stroke(255);
     strokeWeight(2);
     fill(255);
-    stroke(0);
+    stroke("black");
     strokeWeight(2);
     push();
     translate(this.pos.x, this.pos.y);
     rotate(this.vel.heading());
 
-    triangle(-this.r, -this.r / 2, -this.r, this.r / 2, this.r, 0);
-    //circle(0, 0, this.r * 2);
+    // triangle(-this.r, -this.r / 2, -this.r, this.r / 2, this.r, 0);
+    circle(0, 0, this.r * 2);
     
     pop();
   }

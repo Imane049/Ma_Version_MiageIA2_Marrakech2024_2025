@@ -22,6 +22,7 @@ class Vehicle {
 
   applyBehaviors(target) {
     //let force = this.seek(target);
+    //let force = this.pursuePerfect(target);
     let force = this.pursue(target);
     this.applyForce(force);
   }
@@ -53,16 +54,13 @@ class Vehicle {
   /* Poursuite d'un point devant la target !
      cette methode renvoie la force à appliquer au véhicule
   */
-  pursue(target) {
-    let force;
-
- 
+  pursue(target) { 
     // 1 - calcul de la position future de la cible
-    // on fait une copie de la vitesse de la target
+    // on fait une copie du vecteur vitesse de la cible
     let prediction = target.vel.copy();
-
-       // TOD    // on multiplie cette vitesse par 10
-       //  - prediction dans 10 frames = 10 fois la longueur du vecteur
+    // on multiplie cette vitesse par 10
+    //  - prediction dans 10 frames = 10 fois la longueur du vecteur
+    prediction.mult(10);
 
     if (Vehicle.debug) {
       // 3 - dessin du vecteur prediction
@@ -72,6 +70,7 @@ class Vehicle {
     // TODO
     // 2 - On veut dessiner un rond vert devant la cible, dans la direction de déplacement
     // On ajoute la position actuelle de la cible à la prédiction
+    prediction.add(target.pos);
 
     // Maintenant les valeurs x et y de prediction sont
     // des  valeurs absolues dans l'écran, pas des valeurs relatives
@@ -87,11 +86,26 @@ class Vehicle {
     // TODO
     // 3 - On applique la méthode seek à ce point
     // remplacer la ligne suivante
-    force = createVector(0, 0);
-    
-    return force;
+    return this.seek(prediction);
   }
 
+  pursuePerfect(vehicle) {
+    // Use the Law of Sines (https://en.wikipedia.org/wiki/Law_of_sines)
+    // to predict the right collision point
+    const speed_ratio = vehicle.vel.mag() / this.maxSpeed;
+    const target_angle = vehicle.vel.angleBetween(p5.Vector.sub(this.pos, vehicle.pos));
+    const my_angle = asin(sin(target_angle) * speed_ratio);
+    const dist = this.pos.dist(vehicle.pos);
+    const prediction = dist * sin(my_angle) / sin(PI - my_angle - target_angle);
+    const target = vehicle.vel.copy().setMag(prediction).add(vehicle.pos);
+    
+    drawArrow(vehicle.pos, p5.Vector.mult(vehicle.vel, 20), 'red');
+    drawArrow(this.pos, p5.Vector.sub(target, this.pos), 'green');
+    
+    fill(0, 255, 0);
+    circle(target.x, target.y, 8);
+    return this.seek(target);
+  }
   /* inverse de pursue
      cette methode renvoie la force à appliquer au véhicule
   */
@@ -178,3 +192,17 @@ class Vehicle {
   }
 }
 
+// draw an arrow for a vector at a given base position
+function drawArrow(base, vec, myColor) {
+  push();
+  stroke(myColor);
+  strokeWeight(3);
+  fill(myColor);
+  translate(base.x, base.y);
+  line(0, 0, vec.x, vec.y);
+  rotate(vec.heading());
+  let arrowSize = 7;
+  translate(vec.mag() - arrowSize, 0);
+  triangle(0, arrowSize / 2, 0, -arrowSize / 2, arrowSize, 0);
+  pop();
+}

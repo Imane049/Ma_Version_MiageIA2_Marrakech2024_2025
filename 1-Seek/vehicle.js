@@ -40,6 +40,18 @@ class Vehicle {
   flee(target) {
     // inverse de seek !  RENVOYER UNE FORCE INVERSE A CELLE RENVOYEE
     // PAR LE COMPORTEMENT SEEK
+    let vitesseSouhaitee = p5.Vector.sub(target, this.pos ).mult(-1);
+
+    // Dessous c'est l'ETAPE 2 : le pilotage (comment on se dirige vers la cible)
+    // on limite ce vecteur à la longueur maxSpeed
+    vitesseSouhaitee.setMag(this.maxSpeed);
+
+    // on calcule maintenant force = desiredSpeed - currentSpeed
+    let force = p5.Vector.sub(vitesseSouhaitee, this.vel);
+
+    // et on limite cette force à maxForce
+    force.limit(this.maxForce);
+    return force;
   }
 
   // applyForce est une méthode qui permet d'appliquer une force au véhicule
@@ -50,7 +62,7 @@ class Vehicle {
 
   update() {
     // on ajoute l'accélération à la vitesse. L'accélération est un incrément de vitesse
-    // (accélératiion = dérivée de la vitesse)
+    // (accélération = dérivée de la vitesse)
     this.vel.add(this.acc);
     // on contraint la vitesse à la valeur maxSpeed
     this.vel.limit(this.maxSpeed);

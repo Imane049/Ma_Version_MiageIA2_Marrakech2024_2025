@@ -1,28 +1,28 @@
 class Target extends Vehicle {
-    constructor(x, y) {
+  constructor(x, y, r) {
       super(x, y);
-      this.vel = p5.Vector.random2D();
-      this.vel.mult(20);
-    }
-  
-    show() {
-      
+      this.r = r;
+
+      // On lui donne une vitesse aléatoire
+      this.vel.x = random(-10, 10);
+      this.vel.y = random(-10, 10);
+
+      // toutes les 3s, tu changes de vitesse
+      setInterval(() => {
+          this.vel.x = random(-10, 10);
+          this.vel.y = random(-10, 10);
+      }, 1000);
+  }
+
+  show() {
+      // On dessine la target comme un gros cercle rose
       push();
-      stroke("white");
-      strokeWeight(2);
-      fill("pink");
       translate(this.pos.x, this.pos.y);
+
+      fill("pink");
+      stroke("green");
+      strokeWeight(10);
       circle(0, 0, this.r * 2);
       pop();
-
-      /*
-      push();
-      fill("green");
-      this.pointDevant = this.vel.copy();
-      this.pointDevant.mult(10);
-      this.pointDevant.add(this.pos);
-      circle(this.pointDevant.x, this.pointDevant.y, 10);
-      pop();
-      */
-    }
   }
+}
