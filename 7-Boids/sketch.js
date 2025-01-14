@@ -143,7 +143,7 @@ function createSharks(num) {
 
 function draw() {
   background(0, 0, 0);
-  fill(118, 170, 286);
+  fill(118, 170, 190);
   beginShape();
 
   let xPos = 0; 
