@@ -21,6 +21,7 @@ let target;
 let requins = [];
 let nbRequins;
 let sharkSlider;
+let yPos = 0.0; 
 
 function preload() {
   for (let filename of fishFilenames) {
@@ -36,7 +37,7 @@ function preload() {
 
 function setup() {
   
-  createCanvas(windowWidth,windowHeight);
+  createCanvas(1400, 600);
   backgroundImage.resize(1600, 1600);
 
   imageMode(CORNER);  // Default mode, draws from top-left corner
@@ -141,8 +142,36 @@ function createSharks(num) {
 }
 
 function draw() {
+  background(239, 276, 250);
+
+  fill(118, 170, 206);
+  // We are going to draw a polygon out of the wave points
+  beginShape();
+
+  let xPos = 0; // Option #1: 2D Noise
+  // let xoff = yoff; // Option #2: 1D Noise
+
+  // Iterate over horizontal pixels
+  for (let x = 0; x <= width; x += 10) {
+    // Calculate a y value according to noise, map to
+
+    // Option #1: 2D Noise
+    let y = map(noise(xPos, yPos), 0, 1, 200, 300);
+
+
+    // Set the vertex
+    vertex(x, y);
+    // Increment x dimension for noise
+    xPos += 0.05;
+  }
+  // increment y dimension for noise
+  yPos += 0.01;
+  vertex(width, height);
+  vertex(0, height);
+  endShape(CLOSE);
+
 // background(backgroundImage);
-background(0);
+// background(0);
   labelNbBoids.html("Nombre de boids : " + flock.length);
 
   target.x = mouseX;
